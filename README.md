@@ -4,7 +4,7 @@ Custom integration för Home Assistant som spårar när sopkärlen töms.
 
 ## Installation
 
-1. Kopiera `custom_components/fev_sensor/` till `config/custom_components/fev_sensor/`
+1. Kopiera `fev_sensor/` till `config/custom_components/fev_sensor/`
 2. Lägg till i `configuration.yaml`:
 ```yaml
 sensor:
