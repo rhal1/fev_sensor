@@ -6,7 +6,6 @@ from typing import Any
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 _ROTATION = ["Restavfall", "Pappersförpackningar", "Plastförpackningar"]
 
@@ -66,9 +65,9 @@ def _format_date_sv(date: datetime.date) -> str:
 
 async def async_setup_platform(
     hass: HomeAssistant,
-    config: ConfigType,
+    config: dict,
     async_add_entities: AddEntitiesCallback,
-    discovery_info: DiscoveryInfoType | None = None,
+    discovery_info: dict | None = None,
 ) -> None:
     bins = ["Matavfall", "Restavfall", "Pappersförpackningar", "Plastförpackningar"]
     entities: list[SensorEntity] = [FEVBinSensor(b) for b in bins]
