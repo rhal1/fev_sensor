@@ -1,0 +1,10 @@
+{
+  "domain": "fev_sensor",
+  "name": "FEV Sopkärl",
+  "version": "1.0.0",
+  "documentation": "https://github.com/rhal1/fev_sensor",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": [],
+  "iot_class": "calculated"
+}
