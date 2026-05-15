@@ -3,11 +3,13 @@ from __future__ import annotations
 import datetime
 from typing import Any
 
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 _ROTATION = ["Restavfall", "Pappersförpackningar", "Plastförpackningar"]
+_BINS = ["Matavfall", "Restavfall", "Pappersförpackningar", "Plastförpackningar"]
 
 _BASE_WEEK = 18
 _BASE_YEAR = 2026
@@ -51,8 +53,7 @@ def _next_collection_for_bin(bin_name: str, from_date: datetime.date) -> datetim
 
 
 def _next_collections(from_date: datetime.date) -> dict[str, datetime.date]:
-    bins = ["Matavfall", "Restavfall", "Pappersförpackningar", "Plastförpackningar"]
-    return {b: _next_collection_for_bin(b, from_date) for b in bins}
+    return {b: _next_collection_for_bin(b, from_date) for b in _BINS}
 
 
 def _format_date_sv(date: datetime.date) -> str:
@@ -65,18 +66,19 @@ def _format_date_sv(date: datetime.date) -> str:
 
 async def async_setup_platform(
     hass: HomeAssistant,
-    config: dict,
+    config: ConfigType,
     async_add_entities: AddEntitiesCallback,
-    discovery_info: dict | None = None,
+    discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    bins = ["Matavfall", "Restavfall", "Pappersförpackningar", "Plastförpackningar"]
-    entities: list[SensorEntity] = [FEVBinSensor(b) for b in bins]
+    entities: list[SensorEntity] = [FEVBinSensor(b) for b in _BINS]
     entities.append(FEVNextCollectionSensor())
     async_add_entities(entities, update_before_add=True)
 
 
 class FEVBinSensor(SensorEntity):
     _attr_icon = "mdi:trash-can-outline"
+    _attr_device_class = SensorDeviceClass.DATE
+    _attr_should_poll = True
 
     def __init__(self, bin_name: str) -> None:
         self._bin_name = bin_name
@@ -111,8 +113,8 @@ class FEVNextCollectionSensor(SensorEntity):
     _attr_name = "Nästa tömning"
     _attr_unique_id = "fev_next_collection"
     _attr_icon = "mdi:calendar-clock"
-
     _attr_native_unit_of_measurement = "dagar"
+    _attr_should_poll = True
 
     def __init__(self) -> None:
         self._days_until: int | None = None
