@@ -32,3 +32,15 @@ Hämtning sker på **fredagar**, varannan vecka med roterande kärl (startpunkt 
 - v20: Matavfall + Pappersförpackningar
 - v22: Matavfall + Plastförpackningar
 - v24: Matavfall + Restavfall (upprepar)
+
+## Automation
+
+För att enkelt använda detta i en automation, sätt: 
+
+```yaml
+action: # Notification entity
+metadata: {}
+data:
+  title: Soptömning
+  message: '{{ state_attr(''sensor.nasta_tomning'', ''description'') }}'
+```
